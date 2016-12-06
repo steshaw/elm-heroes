@@ -71,9 +71,13 @@ heroDetails hero = [
 heroList : List Hero -> List (Html Msg)
 heroList heroes = [
   h2 [] [(text "My Heroes")],
-  ul [class "heroes"] [
-    li [] [text "a hero"]
-  ]
+  ul [class "list-group heroes"]
+    (heroes |> List.map (\hero ->
+      li [class "list-group-item"] [
+        span [class "badge"] [text (toString hero.id)],
+        text hero.name
+      ]
+    ))
  ]
 
 view : Model -> Html Msg

@@ -1,15 +1,16 @@
-var path              = require( 'path' );
-var webpack           = require( 'webpack' );
-var merge             = require( 'webpack-merge' );
-var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-var autoprefixer      = require( 'autoprefixer' );
-var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-var CopyWebpackPlugin = require( 'copy-webpack-plugin' );
+var path              = require('path');
+var webpack           = require('webpack');
+var merge             = require('webpack-merge');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var autoprefixer      = require('autoprefixer');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-console.log( 'WEBPACK GO!');
 
 // detemine build env
 var TARGET_ENV = process.env.npm_lifecycle_event === 'build' ? 'production' : 'development';
+
+console.log('WEBPACK TARGET_ENV = ' + TARGET_ENV);
 
 // common webpack config
 var commonConfig = {

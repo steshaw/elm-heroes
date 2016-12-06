@@ -5,3 +5,8 @@ $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
 .main {
   margin-top: 3%;
 }
+
+.heroes .list-group-item > .badge {
+  float: none;
+  margin-right: 1em;
+}
