@@ -56,9 +56,9 @@ heroDetails hero = [
 
 view : Model -> Html Msg
 view model =
-  div [class "container"] [
+  div [class "container main"] [
     div [class "jumbotron"]
-      ([h1 [class "main"] [(text title)]] ++ heroDetails model.hero)
+      ([h1 [class "text-center"] [(text title)]] ++ heroDetails model.hero)
   ]
 
 -- Update
