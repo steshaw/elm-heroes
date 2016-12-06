@@ -2,8 +2,6 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick )
 
-import Components.Hello exposing ( hello )
-
 -- Model
 
 type alias Model = Int
@@ -13,12 +11,20 @@ model = 0
 
 -- View
 
+type alias Hero =
+  { id: Int
+  , name: String
+  }
+
 title = "Tour of Heroes"
-hero = "Windstorm"
+hero =
+  { id = 1
+  , name = "Windstorm"
+  }
 
 heroes =
   [ h1 [] [(text title)]
-  , h2 [] [(text (hero ++ " details!"))]
+  , h2 [] [(text (hero.name ++ " details!"))]
   ]
 
 view : Model -> Html Msg
