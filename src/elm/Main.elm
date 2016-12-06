@@ -19,7 +19,8 @@ heroes = [
  ]
 
 type alias Model = {
-  hero: Hero
+  hero: Hero,
+  heroes: List Hero
 }
 
 type alias Hero = {
@@ -35,13 +36,31 @@ windstorm = {
 
 model : Model
 model = {
-  hero = windstorm
+  hero = windstorm,
+  heroes = heroes
  }
 
 -- View
 
 title : String
 title = "Tour of Heroes"
+
+-- heroList : List Hero -> List (Html Msg)
+heroList model = [
+  h2 [] [(text "My Heroes")],
+  ul [class "heroes"]
+    (model.heroes |> List.map (\hero ->
+      li [
+        class (if model.hero.id == hero.id then "selected" else ""),
+        onClick (Select hero)
+      ] [
+        span [class "badge"] [
+          text (toString hero.id)
+        ],
+        text hero.name
+      ]
+    ))
+ ]
 
 heroDetails : Hero -> List (Html Msg)
 heroDetails hero = [
@@ -68,18 +87,6 @@ heroDetails hero = [
   ]
  ]
 
-heroList : List Hero -> List (Html Msg)
-heroList heroes = [
-  h2 [] [(text "My Heroes")],
-  ul [class "heroes"]
-    (heroes |> List.map (\hero ->
-      li [class ""] [
-        span [class "badge"] [text (toString hero.id)],
-        text hero.name
-      ]
-    ))
- ]
-
 view : Model -> Html Msg
 view model =
   div [class "container main"] ([
@@ -87,17 +94,22 @@ view model =
       h1 [] [(text title)],
       i [] [(text "with "), a [href "http://elm-lang.org/"] [(text "Elm")]]
     ]
-  ] ++ heroList heroes ++ heroDetails model.hero)
+  ] ++ heroList model ++ heroDetails model.hero)
 
 -- Update
 
 type alias HeroName = String
 
-type Msg = Change HeroName
+type Msg
+  = Select Hero
+  | Change HeroName
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
+    Select hero ->
+      { model | hero = hero } |> Debug.log ("msg = " ++ (toString msg))
+
     Change newHeroName ->
       let
         hero = model.hero
