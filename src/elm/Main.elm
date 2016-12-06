@@ -4,6 +4,20 @@ import Html.Events exposing (..)
 
 -- Model
 
+heroes : List Hero
+heroes = [
+  { id= 11, name= "Mr. Nice" },
+  { id= 12, name= "Narco" },
+  { id= 13, name= "Bombasto" },
+  { id= 14, name= "Celeritas" },
+  { id= 15, name= "Magneta" },
+  { id= 16, name= "RubberMan" },
+  { id= 17, name= "Dynama" },
+  { id= 18, name= "Dr IQ" },
+  { id= 19, name= "Magma" },
+  { id= 20, name= "Tornado" }
+ ]
+
 type alias Model = {
   hero: Hero
 }
@@ -54,11 +68,21 @@ heroDetails hero = [
   ]
  ]
 
+heroList : List Hero -> List (Html Msg)
+heroList heroes = [
+  h2 [] [(text "My Heroes")],
+  ul [class "heroes"] [
+    li [] [text "a hero"]
+  ]
+ ]
+
 view : Model -> Html Msg
 view model =
   div [class "container main"] [
     div [class "jumbotron"]
-      ([h1 [class "text-center"] [(text title)]] ++ heroDetails model.hero)
+      ([h1 [class "text-center"] [(text title)]]
+        ++ heroList heroes
+        ++ heroDetails model.hero)
   ]
 
 -- Update
