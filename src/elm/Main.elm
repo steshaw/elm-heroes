@@ -1,32 +1,36 @@
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing ( onClick )
+import Html.Events exposing (..)
 
 -- Model
 
-type alias Model = Int
-
-model : number
-model = 0
-
--- View
+type alias Model = {
+  hero: Hero
+}
 
 type alias Hero = {
   id: Int,
   name: String
  }
 
-title : String
-title = "Tour of Heroes"
-
-hero : Hero
-hero = {
+windstorm : Hero
+windstorm = {
   id = 1,
   name = "Windstorm"
  }
 
-renderHero : Hero -> List (Html msg)
-renderHero hero = [
+model : Model
+model = {
+  hero = windstorm
+ }
+
+-- View
+
+title : String
+title = "Tour of Heroes"
+
+heroDetails : Hero -> List (Html Msg)
+heroDetails hero = [
   h2 [] [(text (hero.name ++ " details!")) ],
   div [class "form-horizontal"] [
     div [class "form-group"] [
@@ -38,7 +42,13 @@ renderHero hero = [
     div [class "form-group"] [
       label [for "name", class "control-label col-sm-2"] [(text "Name")],
       div [class "col-sm-6"] [
-        input [id "name", class "form-control", value hero.name] []
+        input [
+          id "name",
+          class "form-control",
+          value hero.name,
+          placeholder "Name",
+          onInput Change
+        ] []
       ]
     ]
   ]
@@ -48,22 +58,28 @@ view : Model -> Html Msg
 view model =
   div [class "container"] [
     div [class "jumbotron"]
-      ([h1 [class "main"] [(text title)]] ++ renderHero hero)
+      ([h1 [class "main"] [(text title)]] ++ heroDetails model.hero)
   ]
 
 -- Update
 
-type Msg = NoOp | Increment
+type alias HeroName = String
+
+type Msg = Change HeroName
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
-    NoOp -> model
-    Increment -> model + 1
+    Change newHeroName ->
+      let
+        hero = model.hero
+        newHero = { hero | name = newHeroName }
+      in
+        { model | hero = newHero }
 
 -- App
 
-main : Program Never Int Msg
+main : Program Never Model Msg
 main =
   Html.beginnerProgram
     { model = model
