@@ -46,9 +46,12 @@ heroList model = [
   ul [class "heroes list-group"]
     (model.heroes |> List.map (\hero ->
       li [
-        class (Maybe.withDefault "list-group-item" (model.hero |> Maybe.map (\modelHero ->
-          if modelHero.id == hero.id then "active list-group-item" else "list-group-item"
-        ))),
+        classList [
+          ("list-group-item", True),
+          ("active", (Maybe.withDefault False (model.hero |> Maybe.map (\modelHero ->
+            modelHero.id == hero.id
+          ))))
+        ],
         onClick (Select hero)
       ] [
         span [class "badge"] [
