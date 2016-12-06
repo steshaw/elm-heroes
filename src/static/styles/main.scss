@@ -19,6 +19,6 @@ $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
   // background-color: $link-hover-color;
   background-color: #f5f5f5;
 }
-.heroes .list-group-item .active:hover {
+.heroes .list-group-item.active:hover {
   background-color: #337ab7;
 }
