@@ -22,29 +22,24 @@ hero =
   , name = "Windstorm"
   }
 
-heroes =
-  [ h1 [] [(text title)]
-  , h2 [] [(text (hero.name ++ " details!"))]
+renderHero hero =
+  [ h2 [] [(text (hero.name ++ " details!"))]
+  , div [class "row"]
+      [ label [class "col-xs-2"] [(text "id:")]
+      , span [class "col-xs-10"] [(text (toString hero.id))]
+      ]
+  , div [class "row"]
+      [ label [class "col-xs-2"] [(text "name:")]
+      , span [class "col-xs-10"] [(text hero.name)]
+      ]
   ]
 
 view : Model -> Html Msg
 view model =
-  div [ class "container main" ] [
-    div [ class "jumbotron" ]
-      heroes
-{-
-      [ hello model
-      , p [] [ text "Elm Tour of Heroes" ]
-      , button [ class "btn btn-primary btn-lg", onClick Increment ]
-          [ span [ class "glyphicon glyphicon-star" ] []
-          , span [] [ text "FTW!" ]
-          ]
-      , br [] []
-      , br [] []
-      , img [ src "static/img/elm.jpg", style imgStyles ] []
+  div [class "container"]
+    [ div [ class "jumbotron" ]
+        ([h1 [class "main"] [(text title)]] ++ renderHero hero)
     ]
--}
-  ]
 
 -- Update
 
@@ -55,12 +50,6 @@ update msg model =
   case msg of
     NoOp -> model
     Increment -> model + 1
-
-imgStyles : List (String, String)
-imgStyles =
-  [ ( "width", "33%" )
-  , ( "border", "4px solid #337AB7")
-  ]
 
 -- App
 
