@@ -109,11 +109,11 @@ switchHero hero heroes =
     if h.id == hero.id then hero else h
   )
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   (case msg of
     Select hero ->
-      { model | hero = Just hero }
+      ({ model | hero = Just hero }, Cmd.none)
 
     Change newHeroName ->
       case model.hero of
@@ -121,21 +121,22 @@ update msg model =
           let
             newHero = { hero | name = newHeroName }
           in
-            { model |
+            ({ model |
               hero = Just newHero,
               heroes = switchHero newHero model.heroes
-            }
+            }, Cmd.none)
 
         Nothing ->
-          model |> Debug.crash "This should not happen")
+          (model, Cmd.none) |> Debug.crash "This should not happen")
     |> Debug.log ("update msg=" ++ (toString msg))
 
 -- App
 
 main : Program Never Model Msg
 main =
-  Html.beginnerProgram
-    { model = model
+  Html.program
+    { init = (model, Cmd.none)
     , view = view
     , update = update
+    , subscriptions = always Sub.none
     }
