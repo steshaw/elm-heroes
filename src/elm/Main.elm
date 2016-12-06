@@ -6,20 +6,21 @@ import Html.Events exposing (..)
 
 heroes : List Hero
 heroes = [
-  { id= 11, name= "Mr. Nice" },
-  { id= 12, name= "Narco" },
-  { id= 13, name= "Bombasto" },
-  { id= 14, name= "Celeritas" },
-  { id= 15, name= "Magneta" },
-  { id= 16, name= "RubberMan" },
-  { id= 17, name= "Dynama" },
-  { id= 18, name= "Dr IQ" },
-  { id= 19, name= "Magma" },
-  { id= 20, name= "Tornado" }
+  { id = 1,  name = "Windstorm" },
+  { id = 11, name = "Mr. Nice" },
+  { id = 12, name = "Narco" },
+  { id = 13, name = "Bombasto" },
+  { id = 14, name = "Celeritas" },
+  { id = 15, name = "Magneta" },
+  { id = 16, name = "RubberMan" },
+  { id = 17, name = "Dynama" },
+  { id = 18, name = "Dr IQ" },
+  { id = 19, name = "Magma" },
+  { id = 20, name = "Tornado" }
  ]
 
 type alias Model = {
-  hero: Hero,
+  hero: Maybe Hero,
   heroes: List Hero
 }
 
@@ -28,15 +29,9 @@ type alias Hero = {
   name: String
  }
 
-windstorm : Hero
-windstorm = {
-  id = 1,
-  name = "Windstorm"
- }
-
 model : Model
 model = {
-  hero = windstorm,
+  hero = Nothing,
   heroes = heroes
  }
 
@@ -51,10 +46,12 @@ heroList model = [
   ul [class "heroes"]
     (model.heroes |> List.map (\hero ->
       li [
-        class (if model.hero.id == hero.id then "selected" else ""),
+        class (Maybe.withDefault "" (model.hero |> Maybe.map (\modelHero ->
+          if modelHero.id == hero.id then "selected" else ""
+        ))),
         onClick (Select hero)
       ] [
-        span [class "badge"] [
+        span [class "hero-badge"] [
           text (toString hero.id)
         ],
         text hero.name
@@ -94,7 +91,7 @@ view model =
       h1 [] [(text title)],
       i [] [(text "with "), a [href "http://elm-lang.org/"] [(text "Elm")]]
     ]
-  ] ++ heroList model ++ heroDetails model.hero)
+  ] ++ heroList model ++ (Maybe.withDefault [] (Maybe.map heroDetails model.hero)))
 
 -- Update
 
@@ -104,18 +101,31 @@ type Msg
   = Select Hero
   | Change HeroName
 
+switchHero hero heroes =
+  heroes |> List.map (\h ->
+    if h.id == hero.id then hero else h
+  )
+
 update : Msg -> Model -> Model
 update msg model =
-  case msg of
+  (case msg of
     Select hero ->
-      { model | hero = hero } |> Debug.log ("msg = " ++ (toString msg))
+      { model | hero = Just hero }
 
     Change newHeroName ->
-      let
-        hero = model.hero
-        newHero = { hero | name = newHeroName }
-      in
-        { model | hero = newHero }
+      case model.hero of
+        Just hero ->
+          let
+            newHero = { hero | name = newHeroName }
+          in
+            { model |
+              hero = Just newHero,
+              heroes = switchHero newHero model.heroes
+            }
+
+        Nothing ->
+          model |> Debug.crash "This should not happen")
+    |> Debug.log ("update msg=" ++ (toString msg))
 
 -- App
 
