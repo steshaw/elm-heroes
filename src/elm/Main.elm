@@ -71,9 +71,9 @@ heroDetails hero = [
 heroList : List Hero -> List (Html Msg)
 heroList heroes = [
   h2 [] [(text "My Heroes")],
-  ul [class "list-group heroes"]
+  ul [class "heroes"]
     (heroes |> List.map (\hero ->
-      li [class "list-group-item"] [
+      li [class ""] [
         span [class "badge"] [text (toString hero.id)],
         text hero.name
       ]
@@ -82,12 +82,12 @@ heroList heroes = [
 
 view : Model -> Html Msg
 view model =
-  div [class "container main"] [
-    div [class "jumbotron"]
-      ([h1 [class "text-center"] [(text title)]]
-        ++ heroList heroes
-        ++ heroDetails model.hero)
-  ]
+  div [class "container main"] ([
+    div [class "jumbotron text-center"] [
+      h1 [] [(text title)],
+      i [] [(text "with "), a [href "http://elm-lang.org/"] [(text "Elm")]]
+    ]
+  ] ++ heroList heroes ++ heroDetails model.hero)
 
 -- Update
 
